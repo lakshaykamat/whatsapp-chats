@@ -1,2 +1,3 @@
-/chats/
+/chats/*
+!chats/example.txt
 
