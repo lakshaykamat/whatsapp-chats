@@ -5,7 +5,7 @@ from typing import Optional
 
 class Time:
     @staticmethod
-    def format_time(time: timedelta) -> str:
+    def format_time(time) -> str:
         """
         Convert a timedelta object to a human-readable form.
 
@@ -82,8 +82,8 @@ class Time:
         timedelta: The time difference between the two timestamps.
         """
         # Convert the timestamps to datetime objects
-        start_datetime: datetime = datetime.strptime(start_time, "%y/%m/%d")
-        end_datetime: datetime = datetime.strptime(end_time, "%y/%m/%d")
+        start_datetime: datetime = datetime.strptime(start_time, "%d/%m/%y")
+        end_datetime: datetime = datetime.strptime(end_time, "%d/%m/%y")
 
         # Ensure start time is before end time
         if start_datetime > end_datetime:

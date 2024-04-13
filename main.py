@@ -1,12 +1,10 @@
-from Chats import Chats
-from Time import Time
+from Chat import Chat
 
 
-chat_processor = Chats("chats/example.txt")
-info = chat_processor.get_message_count_info()
+if __name__ == "__main__":
+    chat = Chat("chats/text/WhatsApp Chat with Anu.txt")
+    print(chat.get_sender_names())
+    print(chat.sender_message_count)
+    print(chat.media_shared)
+    print(chat.date_gap)
 
-print(chat_processor.sender_message_count)
-print(chat_processor.time_gap)
-print(chat_processor.chat_file)
-print(chat_processor.sender_names)
-print(info)
