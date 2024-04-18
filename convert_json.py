@@ -2,10 +2,11 @@ import re
 import json
 
 # Define the regular expression patterns
-timestamp_pattern = r'(\d{2}/\d{2}/\d{2}, \d{2}:\d{2}) - ([^:]+):'
-message_pattern = r'\d{2}/\d{2}/\d{2}, \d{2}:\d{2} - [^:]+: (.*)'
+timestamp_pattern = r'(\d{1,2}/\d{1,2}/\d{2}, \d{2}:\d{2}) - ([^:]+):'
+message_pattern = r'\d{1,2}/\d{1,2}/\d{2}, \d{2}:\d{2} - [^:]+: (.*)'
 
-def parse_chat_line(chat_line):
+
+def __parse_chat_line(chat_line):
     """
     Parse a single chat line and extract timestamp, sender, and message.
 
@@ -25,7 +26,8 @@ def parse_chat_line(chat_line):
     else:
         return None
 
-def extract_chat_data(input_file):
+
+def __extract_chat_data(input_file):
     """
     Extract chat data from a text file.
 
@@ -36,23 +38,32 @@ def extract_chat_data(input_file):
     list: A list of dictionaries containing chat data.
     """
     chat_data = []
-    with open(input_file, "r", encoding="utf-8") as file:
-        for line in file:
-            parsed_line = parse_chat_line(line)
-            if parsed_line:
-                chat_data.append(parsed_line)
+    try:
+        with open(input_file, "r", encoding="utf-8") as file:
+            for line in file:
+                parsed_line = __parse_chat_line(line)
+                if parsed_line:
+                    chat_data.append(parsed_line)
+    except UnicodeDecodeError:
+        # Try opening the file with UTF-16 encoding
+        with open(input_file, "r", encoding="utf-16") as file:
+            for line in file:
+                parsed_line = __parse_chat_line(line)
+                if parsed_line:
+                    chat_data.append(parsed_line)
     return chat_data
+
 
 def convert_textchat_to_json(input_file, output_file):
     """
-    Write chat data to a JSON file.
+    Convert text chat to JSON format.
 
     Args:
-    chat_data (list): A list of dictionaries containing chat data.
-    output_file (str): The path to the output JSON file.
+    input_file (str): Path to the input text file.
+    output_file (str): Path to the output JSON file.
     """
-    chat_data = extract_chat_data(input_file)
+    chat_data = __extract_chat_data(input_file)
     with open(output_file, "w") as json_file:
         json.dump(chat_data, json_file, indent=4)
-    print(f"Chat data has been extracted and written to '{output_file}' file.")
+
 
